@@ -131,7 +131,7 @@ const getCategoryGradient = (category: string) => {
 
 const getDifficultyColor = (difficulty: string) => {
   const colors = {
-    beginner: "bg-green-100 text-green-700 border-green-200",
+    beginner: "bg-green-150 text-green-700 border-green-200",
     intermediate: "bg-yellow-100 text-yellow-700 border-yellow-200",
     advanced: "bg-red-100 text-red-700 border-red-200",
   }

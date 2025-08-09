@@ -95,7 +95,7 @@ const quickActions = [
   { icon: BookOpen, label: "Journal Entry", category: "journal" },
 ]
 
-// Helper functions
+
 const getTimeBasedGreeting = () => {
   const hour = new Date().getHours()
   if (hour < 6) return { greeting: "Good night", icon: Moon, message: "Time for rest and reflection" }

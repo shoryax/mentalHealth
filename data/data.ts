@@ -10,8 +10,6 @@ export const activities = [
       "awareness",
       "intention"
     ],
-    "isFavorite": true,
-    "completedToday": "true",
     "difficulty": "beginner"
   },
   {
@@ -25,7 +23,6 @@ export const activities = [
       "anxiety",
       "quick"
     ],
-    "isFavorite": true,
     "difficulty": "beginner"
   },
   {
@@ -39,8 +36,6 @@ export const activities = [
       "body",
       "tension"
     ],
-    "isFavorite": true,
-    "difficulty": "intermediate"
   },
   {
     "id": "4",
@@ -53,8 +48,6 @@ export const activities = [
       "reflection",
       "positivity"
     ],
-    "isFavorite": false,
-    "completedToday": true,
     "difficulty": "beginner"
   },
   {
@@ -68,7 +61,6 @@ export const activities = [
       "sleep",
       "relaxation"
     ],
-    "isFavorite": true,
     "difficulty": "beginner"
   },
   {
@@ -82,7 +74,6 @@ export const activities = [
       "contemplation",
       "focus"
     ],
-    "isFavorite": false,
     "difficulty": "advanced"
   }
 ];

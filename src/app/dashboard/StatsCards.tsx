@@ -18,7 +18,7 @@ export default function StatsCards({ completedToday, dailyGoal }: StatsCardsProp
       {/* Daily Progress Card */}
       <Card className="bg-white/60 backdrop-blur-sm border-white/20 shadow-lg">
         <CardContent className="p-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between my-3">
             <div>
               <p className="text-sm font-medium text-gray-600 mb-1">Daily Progress</p>
               <p className="text-2xl font-bold text-gray-900">
@@ -34,7 +34,7 @@ export default function StatsCards({ completedToday, dailyGoal }: StatsCardsProp
       {/* This Week Card */}
       <Card className="bg-white/60 backdrop-blur-sm border-white/20 shadow-lg">
         <CardContent className="p-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 my-3">
             <div className="p-3 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500">
               <TrendingUp className="h-6 w-6 text-white" />
             </div>
@@ -50,7 +50,7 @@ export default function StatsCards({ completedToday, dailyGoal }: StatsCardsProp
       {/* Streak Card */}
       <Card className="bg-white/60 backdrop-blur-sm border-white/20 shadow-lg">
         <CardContent className="p-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 my-3">
             <div className="p-3 rounded-full bg-gradient-to-br from-purple-400 to-pink-500">
               <Sparkles className="h-6 w-6 text-white" />
             </div>

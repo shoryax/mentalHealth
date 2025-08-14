@@ -134,12 +134,12 @@ export default function ActivityCard({ activity, userId, onToggleFavorite }: Act
             </Card>
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-                    <div className="bg-white rounded-xl shadow-lg p-8 min-w-[320px] flex flex-col items-center">
-                        <h4 className="text-lg font-semibold mb-2">Activity Started!</h4>
-                        <p className="mb-4 text-center">You have started: <span className="font-bold">{activity.title}</span></p>
+                    <div className="bg-white rounded-xl shadow-lg p-8 min-w-[75%] min-h-[75%] flex flex-col items-center">
+                        <h4 className="text-lg font-semibold text-pink-500 mb-2">Activity Started!</h4>
+                        <p className="mb-4 text-pink-500 text-center">You have started: <span className="font-bold">{activity.title}</span></p>
                         <Button
                             size="sm"
-                            className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6"
+                            className="bg-pink-700 hover:bg-gray-800 text-white rounded-full px-6"
                             onClick={handleClose}
                         >
                             Close

@@ -23,7 +23,8 @@ export const activities = [
       "anxiety",
       "quick"
     ],
-    "difficulty": "beginner"
+    "difficulty": "beginner",
+    "link": "https://youtu.be/tybOi4hjZFQ?si=K1s8I5p-wGaE0Aqt"
   },
   {
     "id": "3",

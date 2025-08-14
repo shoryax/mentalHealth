@@ -25,7 +25,7 @@ export default function QuickActions({ selectedCategory, setSelectedCategory }: 
         <Button
           key={action.label}
           variant="outline"
-          className="bg-white/60 backdrop-blur-sm border-white/20 hover:bg-white/80 transition-all duration-200"
+          className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/80 transition-all duration-200"
           onClick={() =>
             setSelectedCategory(selectedCategory === action.category ? null : action.category)
           }

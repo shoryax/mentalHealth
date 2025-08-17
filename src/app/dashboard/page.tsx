@@ -180,14 +180,12 @@ export default function MentalWellnessDashboard() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {filteredActivities.map((activity: Activity) => (
               <ActivityCard
                 key={activity.id}
                 activity={activity}
                 onToggleFavorite={() => toggleFavorite}
-                doneToday={Number(activity.completedToday || false)}
-                onDoneToday={() => { }} // Add your completion handler here
                 userId={user?.id || ''}
               />
             ))}
@@ -208,7 +206,7 @@ export default function MentalWellnessDashboard() {
         {favorites.length > 0 && !selectedCategory && (
           <div>
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Your Favorites</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
               {activitiesState
                 .filter((activity: Activity) => favorites.includes(activity.id))
                 .slice(0, 3)
@@ -217,8 +215,6 @@ export default function MentalWellnessDashboard() {
                     key={activity.id}
                     activity={activity}
                     onToggleFavorite={toggleFavorite}
-                    doneToday={Number(activity.completedToday || false)}
-                    onDoneToday={() => { }} // Add your completion handler here
                     userId={user?.id || ''}
                   />
                 ))}

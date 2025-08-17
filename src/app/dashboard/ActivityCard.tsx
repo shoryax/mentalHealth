@@ -77,8 +77,8 @@ export default function ActivityCard({ activity, userId, onToggleFavorite }: Act
 
     return (
         <>
-            <Card className="w-90 mx-auto rounded-2xl shadow-lg border border-gray-200 bg-white/90 hover:shadow-xl transition-all duration-300 mb-8">
-                <CardContent className="p-6 flex flex-col gap-3 h-full">
+            <Card className="w-full rounded-2xl shadow-lg border border-gray-200 bg-white/90 hover:shadow-xl transition-all duration-300 flex flex-col h-full min-h-[340px]">
+                <CardContent className="p-6 flex flex-col gap-3 flex-grow">
                     <div className="flex items-center justify-between">
                         <div className={`p-3 rounded-xl bg-gradient-to-br ${getCategoryGradient(activity.category)} border border-white/30 flex items-center my-3 justify-center`}>
                             <Icon className="h-6 w-6 text-gray-700" />
@@ -97,7 +97,7 @@ export default function ActivityCard({ activity, userId, onToggleFavorite }: Act
                             />
                         </Button>
                     </div>
-                    <div>
+                    <div className="flex-grow">
                         <h3 className="font-semibold text-gray-900 text-xl leading-tight mb-1">{activity.title}</h3>
                         <p className="text-sm text-gray-600 leading-relaxed">{activity.description}</p>
                     </div>

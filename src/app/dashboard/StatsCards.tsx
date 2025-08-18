@@ -8,10 +8,11 @@ import { TrendingUp, Sparkles } from "lucide-react";
 interface StatsCardsProps {
   completedToday: number;
   dailyGoal: number;
+  weeklyCompleted: number;
 }
 
 // ...existing code...
-export default function StatsCards({ completedToday, dailyGoal }: StatsCardsProps) {
+export default function StatsCards({ completedToday, dailyGoal, weeklyCompleted }: StatsCardsProps) {
   const progressPercentage = Math.floor((completedToday / dailyGoal) * 100);
 
   return (
@@ -43,9 +44,10 @@ export default function StatsCards({ completedToday, dailyGoal }: StatsCardsProp
             </div>
             <div>
               <p className="text-sm font-medium text-gray-600">This Week</p>
-              <p className="text-2xl font-bold text-white/80">12</p>
+              <p className="text-2xl font-bold text-white/80">{weeklyCompleted}</p>
+              {/* Placeholder growth badge; replace with dynamic comparison when lastWeekAvailable */}
               <span className="inline-block px-2 py-1 text-xs rounded bg-emerald-100 text-emerald-700 mt-1">
-                +3 from last week
+                keep going
               </span>
             </div>
           </div>

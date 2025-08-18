@@ -44,9 +44,14 @@ export default function MentalWellnessDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
+  // doneToday ("completedToday") count for local UI; initializes from activities having completedToday
   const [completedToday, setCompletedToday] = useState(
     activities.filter((activity: Activity) => activity.completedToday).length
   );
+  const [weeklyCompleted, setWeeklyCompleted] = useState<number>(0);
+
+  const incrementDoneToday = () => setCompletedToday(prev => prev + 1);
+  const incrementWeekly = () => setWeeklyCompleted(prev => prev + 1);
 
   // Filter activities based on search query and selected category
   const filteredActivities = activities.filter((activity: Activity) => {
@@ -90,6 +95,18 @@ export default function MentalWellnessDashboard() {
           .eq("user_id", user.id);
         if (data) {
           setFavorites(data.map((item: any) => item.activity_id));
+        }
+        // Fetch weekly completed count (activities started in last 7 days including today)
+        const weekAgo = new Date();
+        weekAgo.setHours(0,0,0,0);
+        weekAgo.setDate(weekAgo.getDate() - 6); // 7-day window
+        const { data: weeklyData, error: weeklyError } = await supabase
+          .from("userStats")
+          .select("id, started_at")
+          .eq("user_id", user.id)
+          .gte("started_at", weekAgo.toISOString());
+        if (!weeklyError && weeklyData) {
+          setWeeklyCompleted(weeklyData.length);
         }
       }
     };
@@ -159,8 +176,8 @@ export default function MentalWellnessDashboard() {
           <QuickActions selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
         </div>
 
-        {/* Stats Cards */}
-        <StatsCards completedToday={completedToday} dailyGoal={dailyGoal} />
+  {/* Stats Cards */}
+  <StatsCards completedToday={completedToday} dailyGoal={dailyGoal} weeklyCompleted={weeklyCompleted} />
 
         {/* Activities Section */}
         <div className="mb-8">
@@ -187,6 +204,7 @@ export default function MentalWellnessDashboard() {
                 activity={activity}
                 onToggleFavorite={() => toggleFavorite}
                 userId={user?.id || ''}
+                onIncrementDoneToday={() => { incrementDoneToday(); incrementWeekly(); }}
               />
             ))}
           </div>
@@ -216,6 +234,7 @@ export default function MentalWellnessDashboard() {
                     activity={activity}
                     onToggleFavorite={toggleFavorite}
                     userId={user?.id || ''}
+                    onIncrementDoneToday={() => { incrementDoneToday(); incrementWeekly(); }}
                   />
                 ))}
             </div>

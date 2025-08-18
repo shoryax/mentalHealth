@@ -19,6 +19,7 @@ interface ActivityCardProps {
     activity: Activity;
     onToggleFavorite: (id: string) => void;
     userId: string;
+    onIncrementDoneToday?: () => void; // callback to bump doneToday state in parent (also used to bump weekly)
 }
 
 const getCategoryGradient = (category: string) => {
@@ -54,22 +55,71 @@ const getCategoryIcon = (category: string) => {
     return icons[category as keyof typeof icons] || Heart
 }
 
-export default function ActivityCard({ activity, userId, onToggleFavorite }: ActivityCardProps) {
+export default function ActivityCard({ activity, userId, onToggleFavorite, onIncrementDoneToday }: ActivityCardProps) {
     const [showModal, setShowModal] = useState(false);
     const Icon = getCategoryIcon(activity.category);
 
     const handleStart = async () => {
-        const { error } = await supabase
+        const { error: insertError } = await supabase
             .from("userStats")
-            .insert([{
-                user_id: userId,
-                activity_id: activity.id,
-                category: activity.category,
-                started_at: new Date().toISOString(),
-            }]);
-        if (error) {
-            console.error("Error inserting into userStats:", error.message);
+            .insert([
+                {
+                    user_id: userId,
+                    activity_id: activity.id,
+                    category: activity.category,
+                    started_at: new Date().toISOString(),
+                }
+            ]);
+        if (insertError) {
+            console.error("Error inserting into userStats:", insertError.message);
         }
+
+        // 2. Increment compToday (stored in Supabase) – assuming there is one row per user
+        //    Adjust table name / filters if your schema differs (e.g., per-day rows).
+        try {
+            const { data: statRow, error: selectError } = await supabase
+                .from("userStats")
+                .select("id, compToday")
+                .eq("user_id", userId)
+                .order("id", { ascending: true })
+                .limit(1)
+                .maybeSingle();
+
+            if (selectError) {
+                console.warn("Could not fetch existing compToday:", selectError.message);
+            } else if (statRow?.id) {
+                const current = statRow.compToday || 0;
+                const { error: updateError } = await supabase
+                    .from("userStats")
+                    .update({ compToday: current + 1 })
+                    .eq("id", statRow.id);
+                if (updateError) {
+                    console.error("Failed to update compToday:", updateError.message);
+                }
+            } else {
+                // If no row found, optionally create one with compToday = 1 (comment out if undesired)
+                const { error: createError } = await supabase
+                    .from("userStats")
+                    .insert([
+                        {
+                            user_id: userId,
+                            activity_id: activity.id,
+                            category: activity.category,
+                            started_at: new Date().toISOString(),
+                            compToday: 1,
+                        }
+                    ]);
+                if (createError) {
+                    console.error("Failed to create initial compToday row:", createError.message);
+                }
+            }
+        } catch (e) {
+            console.error("Unexpected error updating compToday", e);
+        }
+
+    // 3. Notify parent so local UI state (doneToday & weekly) increments immediately
+    onIncrementDoneToday && onIncrementDoneToday();
+
         setShowModal(true);
     };
 

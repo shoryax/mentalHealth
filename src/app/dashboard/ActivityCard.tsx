@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Brain, Leaf, Moon, BookOpen, Zap, Play, Star, Badge, Clock } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
+import YouTubePlayer from './YouTubePlayer';
 
 export interface Activity {
     id: string;
@@ -127,6 +128,7 @@ export default function ActivityCard({ activity, userId, onToggleFavorite, onInc
 
     return (
         <>
+        <YouTubePlayer></YouTubePlayer>
             <Card className="w-full rounded-2xl shadow-lg border border-gray-200 bg-white/90 hover:shadow-xl transition-all duration-300 flex flex-col h-full min-h-[340px]">
                 <CardContent className="p-6 flex flex-col gap-3 flex-grow">
                     <div className="flex items-center justify-between">

@@ -23,13 +23,11 @@ interface Activity {
   difficulty: "beginner" | "intermediate" | "advanced";
 }
 
-// Convert string "true" to boolean for completedToday
 const activities: Activity[] = rawActivities.map((activity: any) => ({
   ...activity,
   completedToday: activity.completedToday === "true" || activity.completedToday === true,
 }));
 
-// Helper function
 const getTimeBasedGreeting = () => {
   const hour = new Date().getHours();
   if (hour < 6) return { greeting: "Good night", icon: Moon, message: "Time for rest and reflection" };
@@ -44,7 +42,6 @@ export default function MentalWellnessDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
-  // doneToday ("completedToday") count for local UI; initializes from activities having completedToday
   const [completedToday, setCompletedToday] = useState(
     activities.filter((activity: Activity) => activity.completedToday).length
   );
@@ -53,7 +50,6 @@ export default function MentalWellnessDashboard() {
   const incrementDoneToday = () => setCompletedToday(prev => prev + 1);
   const incrementWeekly = () => setWeeklyCompleted(prev => prev + 1);
 
-  // Filter activities based on search query and selected category
   const filteredActivities = activities.filter((activity: Activity) => {
     const matchesSearch =
       activity.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -63,7 +59,6 @@ export default function MentalWellnessDashboard() {
     return matchesSearch && matchesCategory;
   });
 
-  // Handle favorite toggle
   const toggleFavorite = (id: string) => {
     setFavorites((prev: string[]) =>
       prev.includes(id) ? prev.filter((fav: string) => fav !== id) : [...prev, id]
@@ -75,7 +70,6 @@ export default function MentalWellnessDashboard() {
     );
   };
 
-  // Update activities state to reflect favorite status
   const [activitiesState, setActivities] = useState<Activity[]>(
     activities.map((activity: Activity) => ({
       ...activity,
@@ -83,7 +77,6 @@ export default function MentalWellnessDashboard() {
     }))
   );
 
-  // Supabase user authentication
   useEffect(() => {
     const fetchUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -96,9 +89,9 @@ export default function MentalWellnessDashboard() {
         if (data) {
           setFavorites(data.map((item: any) => item.activity_id));
         }
-        // Fetch weekly completed count (activities started in last 7 days including today)
+
         const weekAgo = new Date();
-        weekAgo.setHours(0,0,0,0);
+        weekAgo.setHours(0, 0, 0, 0);
         weekAgo.setDate(weekAgo.getDate() - 6); // 7-day window
         const { data: weeklyData, error: weeklyError } = await supabase
           .from("userStats")
@@ -113,7 +106,6 @@ export default function MentalWellnessDashboard() {
     fetchUser();
   }, []);
 
-  // Update Supabase when favorites change
   useEffect(() => {
     if (user) {
       const updateFavorites = async () => {
@@ -129,7 +121,6 @@ export default function MentalWellnessDashboard() {
     }
   }, [favorites, user]);
 
-  // Time-based greeting
   const { greeting, icon: GreetingIcon, message } = getTimeBasedGreeting();
   const displayName = user?.user_metadata?.full_name?.split(' ')[0] || "Guest";
 
@@ -176,8 +167,8 @@ export default function MentalWellnessDashboard() {
           <QuickActions selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
         </div>
 
-  {/* Stats Cards */}
-  <StatsCards completedToday={completedToday} dailyGoal={dailyGoal} weeklyCompleted={weeklyCompleted} />
+        {/* Stats Cards */}
+        <StatsCards completedToday={completedToday} dailyGoal={dailyGoal} weeklyCompleted={weeklyCompleted} />
 
         {/* Activities Section */}
         <div className="mb-8">

@@ -156,7 +156,7 @@ const Settings = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/" className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors">
+              <Link href="/" className="flex items-center space-x-2 text-gray-700 hover:text-black transition-colors">
                 <ArrowLeft className="h-5 w-5" />
                 <span>Back to Home</span>
               </Link>

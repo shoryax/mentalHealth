@@ -59,7 +59,7 @@ const Categories = () => {
           {categories.map((category, index) => (
             <div
               key={index}
-              className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-center group hover:scale-105"
+              className="bg-white/70 p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-center group hover:scale-105"
             >
               <div className="mb-6 flex justify-center">
                 <div className="p-3 bg-gray-50 rounded-full group-hover:bg-blue-50 transition-colors">

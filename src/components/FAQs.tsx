@@ -11,7 +11,6 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const FAQ = () => {
   const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation<HTMLDivElement>();
-  const { ref: cardsRef, isVisible: cardsVisible } = useScrollAnimation<HTMLDivElement>();
   const faqs = [
     {
       question: "How do mental health cards work?",
@@ -52,7 +51,7 @@ const FAQ = () => {
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-700 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4">
             Frequently Asked Questions
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -62,7 +61,7 @@ const FAQ = () => {
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <Collapsible key={index} className="bg-gray-50 rounded-lg">
+            <Collapsible key={index} className="bg-white/70 rounded-lg">
               <CollapsibleTrigger className="flex justify-between items-center w-full p-6 text-left hover:bg-gray-100 transition-colors rounded-lg">
                 <h3 className="text-lg font-semibold text-gray-700 pr-4">
                   {faq.question}

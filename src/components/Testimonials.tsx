@@ -36,10 +36,10 @@ const Testimonials = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-700 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4">
             Stories of Hope
           </h2>
-          <p className="text-lg text-gray-700 max-w-5xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-5xl mx-auto">
             Real experiences from people who have found comfort and strength through our resources
           </p>
         </div>
@@ -55,7 +55,7 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+              className="bg-white/70 p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
             >
               <Quote className="h-8 w-8 text-pink-400 mb-4" />
               <p className="text-gray-700 mb-6 italic leading-relaxed">

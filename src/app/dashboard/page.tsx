@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Search, Star, Clock, Heart, Brain, Leaf, Moon, Sun, Sunrise, Sunset, BookOpen, Zap, TrendingUp, Sparkles, ArrowRight } from "lucide-react";
+import { Search, Moon, Sun, Sunrise, Sunset, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "../../lib/supabaseClient";
 import Header from "../../components/Header";
@@ -174,7 +174,7 @@ export default function MentalWellnessDashboard() {
         {/* Activities Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-bold text-gray-900">
+            <h3 className="text-2xl font-bold text-gray-700">
               {selectedCategory ? `${selectedCategory} Activities` : "Recommended for You"}
             </h3>
             {selectedCategory && (

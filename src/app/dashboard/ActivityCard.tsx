@@ -13,6 +13,7 @@ export interface Activity {
     difficulty: string;
     isFavorite: boolean;
     category: string;
+    link?: string; // optional YouTube link
 }
 
 interface ActivityCardProps {
@@ -184,16 +185,46 @@ export default function ActivityCard({ activity, userId, onToggleFavorite, onInc
             </Card>
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-                    <div className="bg-white rounded-xl shadow-lg p-8 min-w-[75%] min-h-[75%] flex flex-col items-center">
-                        <h4 className="text-lg font-semibold text-pink-500 mb-2">Activity Started!</h4>
-                        <p className="mb-4 text-pink-500 text-center">You have started: <span className="font-bold">{activity.title}</span></p>
-                        <Button
-                            size="sm"
-                            className="bg-pink-700 hover:bg-gray-800 text-white rounded-full px-6"
-                            onClick={handleClose}
-                        >
-                            Close
-                        </Button>
+                    <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-3xl mx-auto flex flex-col items-center">
+                        {activity.link ? (
+                            <>
+                                <h4 className="text-lg font-semibold text-pink-500 mb-4 text-center">{activity.title}</h4>
+                                <div className="w-full aspect-video mb-4 rounded-lg overflow-hidden bg-black">
+                                    <iframe
+                                        className="w-full h-full"
+                                        src={(function(){
+                                            const url = activity.link || '';
+                                            // Basic YouTube ID extraction
+                                            const ytMatch = url.match(/(?:youtu.be\/|v=|embed\/)([A-Za-z0-9_-]{6,12})/);
+                                            const id = ytMatch ? ytMatch[1] : '';
+                                            return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : '';
+                                        })()}
+                                        title={activity.title}
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                </div>
+                                <Button
+                                    size="sm"
+                                    className="bg-pink-600 hover:bg-pink-700 text-white rounded-full px-6"
+                                    onClick={handleClose}
+                                >
+                                    Close
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <h4 className="text-lg font-semibold text-pink-500 mb-2">Activity Started!</h4>
+                                <p className="mb-4 text-pink-500 text-center">You have started: <span className="font-bold">{activity.title}</span></p>
+                                <Button
+                                    size="sm"
+                                    className="bg-pink-700 hover:bg-gray-800 text-white rounded-full px-6"
+                                    onClick={handleClose}
+                                >
+                                    Close
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </div>
             )}

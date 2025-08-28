@@ -21,6 +21,7 @@ interface Activity {
   isFavorite: boolean;
   completedToday?: boolean;
   difficulty: "beginner" | "intermediate" | "advanced";
+  link?: string; // optional video link
 }
 
 const activities: Activity[] = rawActivities.map((activity: any) => ({

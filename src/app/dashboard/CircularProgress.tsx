@@ -1,8 +1,8 @@
 import React from "react";
-import { dailyGoal } from "../../../data/data";
 
 export default function CircularProgress({ value, size = 80 }: { value: number; size?: number }) {
-    const progressPercentage = Math.floor((value / dailyGoal) * 100);
+    // value is already a percentage (0-100) from caller
+    const progressPercentage = Math.max(0, Math.min(100, Math.floor(value)));
     const radius = (size - 8) / 2;
     const circumference = radius * 2 * Math.PI;
     const offset = Math.floor(circumference - (progressPercentage / 100) * circumference);

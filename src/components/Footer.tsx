@@ -47,7 +47,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Crisis Support</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Find a Therapist</a></li>
+              <li><a href="https://www.google.com/maps/search/physcologists+near+me" className="text-gray-300 hover:text-white transition-colors">Find a Therapist</a></li>
               <li><a href="#" className="text-gray-300 hover:text-white transition-colors">FAQ</a></li>
               <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
             </ul>

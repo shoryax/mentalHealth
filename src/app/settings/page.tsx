@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Bell, Shield, Palette, Heart, Globe, Database, Users, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -11,18 +11,55 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import Header from '../../components/Header';
+import { supabase } from "@/lib/supabaseClient";
+import { useDarkMode } from '@/components/DarkModeProvider';
 
 const Settings = () => {
   const [dailyReminders, setDailyReminders] = useState(true);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+    }
+    getUser();
+  }, []);
+
+  const [therapist_contact, setTherapistContact] = useState("");
+  const [emergency_contact, setEmergencyContact] = useState("");
+
+  const handleSetEmergencyContact = async (emergency_contact: string) => {
+    const { error: insertError } = await supabase
+      .from("settings")
+      .upsert([
+        { user_id: user.id, 
+          emergencyContact: emergency_contact.trim() || null },
+      ])
+    if (insertError) {
+      console.error("Error inserting emergency contact", insertError.message);
+    }
+  }
 
   const settingsSections = [
+    {
+      id: 'appearance',
+      title: 'Appearance',
+      icon: Palette,
+      description: 'Theme & display preferences',
+      settings: [
+        { type: 'switch', label: 'Dark Mode', value: isDarkMode, onChange: () => toggleDarkMode() }
+      ]
+    },
     {
       id: 'profile',
       title: 'Profile & Privacy',
       icon: Shield,
       description: 'Manage your profile visibility and privacy settings',
       settings: [
-        { type: 'switch', label: 'Allow Data Sharing for Research', value: false },
+        { type: 'switch', label: 'Allow Data Sharing for Research', value: true },
         { type: 'input', label: 'Emergency Contact', placeholder: 'Enter phone number' }
       ]
     },
@@ -81,8 +118,9 @@ const Settings = () => {
     switch (setting.type) {
       case 'switch':
         return (
-          <div key={index} className="flex items-center justify-between py-2">
-            <Label htmlFor={`setting-${index}`} className="text-sm font-medium text-gray-700">
+          <div key={index} className={`flex items-center justify-between py-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
+            <Label htmlFor={`setting-${index}`} className="text-sm font-medium text-gray-400">
               {setting.label}
             </Label>
             <Switch
@@ -130,7 +168,7 @@ const Settings = () => {
         return (
           <div key={index} className="py-2">
             <Label className="text-sm font-medium mb-2 block text-gray-700">{setting.label}</Label>
-            <Input placeholder={setting.placeholder} className="text-gray-700" />
+            <Input placeholder={setting.placeholder} className="text-gray-400"/>
           </div>
         );
       case 'button':
@@ -148,105 +186,103 @@ const Settings = () => {
         return null;
     }
   };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      {/* Header */}
-      <div className="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="flex items-center space-x-2 text-gray-700 hover:text-black transition-colors">
-                <ArrowLeft className="h-5 w-5" />
-                <span>Back to Home</span>
-              </Link>
+    <div className=''>
+      <div className='py-14'>
+        <Header />
+      </div>
+      <div className={`min-h-screen bg-gradient-to-br`}>
+        <div className={`fix backdrop-blur-sm shadow-sm sticky top-0 z-50 ${isDarkMode ? 'bg-inherit' : 'bg-white'}`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-4">
+                <Link href="/" className={`flex items-center space-x-2 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-black'} transition-colors`}>
+                  <ArrowLeft className="h-5 w-5" />
+                  <span>Back to Home</span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-        <div className="space-y-8">
-          {/* Page Header */}
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-700 mb-2">App Settings</h2>
-            <p className="text-lg text-gray-700">Customize your mental health journey</p>
-          </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="space-y-8">
+            <div className="text-center">
+              <h2 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-700'}`}>App Settings</h2>
+              <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Customize your mental health journey</p>
+            </div>
 
-          {/* Settings Grid */}
-          <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-            {settingsSections.map((section) => {
-              const IconComponent = section.icon;
-              return (
-                <Card key={section.id} className="h-fit">
-                  <CardHeader>
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <IconComponent className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg text-gray-700">{section.title}</CardTitle>
-                        <CardDescription className="text-sm text-gray-700">
-                          {section.description}
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-1">
-                      {section.settings.map((setting, index) => (
-                        <div key={index}>
-                          {renderSetting(setting, index)}
-                          {index < section.settings.length - 1 && (
-                            <Separator className="my-3" />
-                          )}
+            <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+              {settingsSections.map((section) => {
+                const IconComponent = section.icon;
+                return (
+                  <Card key={section.id} className={`h-fit ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                    <CardHeader>
+                      <div className="flex items-center space-x-3">
+                        <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-blue-100'} p-2 rounded-lg`}>
+                          <IconComponent className={`h-5 w-5 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} />
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                        <div>
+                          <CardTitle className={`text-lg ${isDarkMode ? 'text-gray-100' : 'text-gray-700'}`}>{section.title}</CardTitle>
+                          <CardDescription className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            {section.description}
+                          </CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-1">
+                        {section.settings.map((setting, index) => (
+                          <div key={index}>
+                            {renderSetting(setting, index)}
+                            {index < section.settings.length - 1 && (
+                              <Separator className={`my-3 ${isDarkMode ? 'bg-gray-700' : ''}`} />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
 
-          {/* Emergency Section */}
-          <Card className="border-red-200 bg-red-50/50">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <div className="bg-red-100 p-2 rounded-lg">
-                  <Phone className="h-5 w-5 text-red-600" />
+            <Card className={`${isDarkMode ? 'border-red-500/30 bg-red-900/30' : 'border-red-200 bg-red-50/50'}`}>
+              <CardHeader>
+                <div className="flex items-center space-x-3">
+                  <div className={`${isDarkMode ? 'bg-red-800' : 'bg-red-100'} p-2 rounded-lg`}>
+                    <Phone className={`h-5 w-5 ${isDarkMode ? 'text-red-400' : 'text-red-600'}`} />
+                  </div>
+                  <div>
+                    <CardTitle className={`text-lg ${isDarkMode ? 'text-red-300' : 'text-red-900'}`}>Crisis Support</CardTitle>
+                    <CardDescription className={`${isDarkMode ? 'text-red-400' : 'text-red-700'}`}>
+                      24/7 emergency resources and contacts
+                    </CardDescription>
+                  </div>
                 </div>
-                <div>
-                  <CardTitle className="text-lg text-red-900">Crisis Support</CardTitle>
-                  <CardDescription className="text-red-700">
-                    24/7 emergency resources and contacts
-                  </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Button variant="outline" className={`${isDarkMode ? 'border-red-600 text-red-400 hover:bg-red-800/40' : 'border-red-300 text-red-700 hover:bg-red-100'}`}>
+                      Crisis Hotline: 988
+                    </Button>
+                    <Button variant="outline" className={`${isDarkMode ? 'border-red-600 text-red-400 hover:bg-red-800/40' : 'border-red-300 text-red-700 hover:bg-red-100'}`}>
+                      Text HOME to 741741
+                    </Button>
+                  </div>
+                  <p className={`text-sm ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>
+                    If you're experiencing a mental health emergency, please contact emergency services immediately.
+                  </p>
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Button variant="outline" className="border-red-300 text-red-700 hover:bg-red-100">
-                    Crisis Hotline: 988
-                  </Button>
-                  <Button variant="outline" className="border-red-300 text-red-700 hover:bg-red-100">
-                    Text HOME to 741741
-                  </Button>
-                </div>
-                <p className="text-sm text-red-600">
-                  If you're experiencing a mental health emergency, please contact emergency services immediately.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          {/* Save Button */}
-          <div className="flex justify-center pt-6">
-            <Button size="lg" className="px-8 text-gray-700">
-              Save All Settings
-            </Button>
+            <div className="flex justify-center pt-6">
+              <Button size="lg" onClick = {() => handleSetEmergencyContact(emergency_contact)} className={`px-8 ${isDarkMode ? 'bg-pink-600 hover:bg-pink-500 text-white' : 'text-gray-700'}`}>
+                Save All Settings
+              </Button>
+            </div>
           </div>
         </div>
       </div>

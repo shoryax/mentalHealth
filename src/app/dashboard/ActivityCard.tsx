@@ -13,7 +13,7 @@ export interface Activity {
     difficulty: string;
     isFavorite: boolean;
     category: string;
-    link?: string; // optional YouTube link
+    link?: string;
 }
 
 interface ActivityCardProps {
@@ -74,9 +74,6 @@ export default function ActivityCard({ activity, userId, onToggleFavorite, onInc
         if (insertError) {
             console.error("Error inserting into userStats:", insertError.message);
         }
-
-        // 2. Increment compToday (stored in Supabase) – assuming there is one row per user
-        //    Adjust table name / filters if your schema differs (e.g., per-day rows).
         try {
             const { data: statRow, error: selectError } = await supabase
                 .from("userStats")
@@ -120,7 +117,6 @@ export default function ActivityCard({ activity, userId, onToggleFavorite, onInc
 
     // 3. Notify parent so local UI state (doneToday & weekly) increments immediately
     onIncrementDoneToday && onIncrementDoneToday();
-
         setShowModal(true);
     };
 

@@ -57,8 +57,8 @@ const Header = () => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 w-3/4 mx-auto mt-8 mb-16 backdrop-blur-lg shadow-xl rounded-2xl z-50 transition-colors duration-300 ${isDarkMode
-        ? 'bg-gray-900/20 text-white'
-        : 'bg-white/5 text-gray-700'
+      ? 'bg-gray-900/20 text-white'
+      : 'bg-white/5 text-gray-700'
       }`}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -95,8 +95,8 @@ const Header = () => {
             <button
               onClick={toggleDarkMode}
               className={`p-2 rounded-lg transition-all duration-300 hover:bg-opacity-20 ${isDarkMode
-                  ? 'hover:bg-white/20 text-yellow-400'
-                  : 'hover:bg-gray-200 text-gray-700'
+                ? 'hover:bg-white/20 text-yellow-400'
+                : 'hover:bg-gray-200 text-gray-700'
                 }`}
               aria-label="Toggle dark mode"
             >
@@ -124,8 +124,8 @@ const Header = () => {
                     <User className={`h-6 w-6 ${isDarkMode ? 'text-pink-300' : 'text-pink-100'}`} />
                   )}
                   <span className={`text-sm rounded-full px-2 py-1 transition-colors duration-300 ${isDarkMode
-                      ? 'text-white bg-pink-900/50'
-                      : 'text-gray-700 bg-pink-100'
+                    ? 'text-white bg-pink-900/50'
+                    : 'text-gray-700 bg-pink-100'
                     }`}>
                     {displayName}
                   </span>
@@ -133,14 +133,14 @@ const Header = () => {
 
                 {dropdownOpen && (
                   <div className={`absolute right-0 mt-2 w-40 backdrop-blur-md border z-50 rounded-lg transition-colors duration-300 ${isDarkMode
-                      ? 'bg-gray-800/20 border-gray-600/50'
-                      : 'bg-pink-100/20 border-pink-200/50'
+                    ? 'bg-gray-800/20 border-gray-600/50'
+                    : 'bg-pink-100/20 border-pink-200/50'
                     }`}>
                     <Link
                       href="/settings"
                       className={`block px-4 py-2 text-sm transition-colors duration-300 ${isDarkMode
-                          ? 'text-gray-300 hover:bg-gray-700/50'
-                          : 'text-gray-700 hover:bg-pink-200/50'
+                        ? 'text-gray-300 hover:bg-gray-700/50'
+                        : 'text-gray-700 hover:bg-pink-200/50'
                         }`}
                       onClick={() => setDropdownOpen(false)}
                     >
@@ -151,8 +151,8 @@ const Header = () => {
                     <button
                       onClick={handleSignOut}
                       className={`w-full text-left px-4 py-2 text-sm transition-colors duration-300 ${isDarkMode
-                          ? 'text-gray-300 hover:bg-gray-700/50'
-                          : 'text-gray-700 hover:bg-pink-200/50'
+                        ? 'text-gray-300 hover:bg-gray-700/50'
+                        : 'text-gray-700 hover:bg-pink-200/50'
                         }`}
                     >
                       <img src="exit.svg" alt="Sign Out" className="inline-block w-5 h-5 mr-2" />

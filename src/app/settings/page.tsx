@@ -33,8 +33,8 @@ const Settings = () => {
 
   const handleSetEmergencyContact = async (emergency_contact: string) => {
     const { error: insertError } = await supabase
-      .from("settings")
-      .upsert([
+      .from("userSettings")
+      .insert([
         { user_id: user.id, 
           emergencyContact: emergency_contact.trim() || null },
       ])

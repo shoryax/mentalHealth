@@ -72,7 +72,7 @@ const Settings = () => {
       description: 'Manage your profile visibility and privacy settings',
       settings: [
         { type: 'switch', label: 'Allow Data Sharing for Research', value: true },
-  { type: 'input', label: 'Emergency Contact', placeholder: 'Enter phone number', value: emergency_contact, onChange: (e: any) => setEmergencyContact(e.target.value) }
+        { type: 'input', label: 'Emergency Contact', placeholder: 'Enter phone number', value: emergency_contact, onChange: (e: any) => setEmergencyContact(e.target.value) }
       ]
     },
     {
@@ -95,7 +95,7 @@ const Settings = () => {
       description: 'Personalize your mental health journey',
       settings: [
         { type: 'select', label: 'Preferred Coping Strategies', options: ['breathing', 'meditation', 'journaling', 'exercise'] },
-  { type: 'input', label: 'Therapist Contact', placeholder: 'Enter therapist info', value: therapist_contact, onChange: (e: any) => setTherapistContact(e.target.value) },
+        { type: 'input', label: 'Therapist Contact', placeholder: 'Enter therapist info', value: therapist_contact, onChange: (e: any) => setTherapistContact(e.target.value) },
         { type: 'switch', label: 'Therapy Session Reminders', value: false },
         { type: 'select', label: 'Crisis Support Level', options: ['minimal', 'moderate', 'intensive'] }
       ]
@@ -296,7 +296,7 @@ const Settings = () => {
             </Card>
 
             <div className="flex justify-center pt-6">
-              <Button size="lg" onClick = {() => handleSetEmergencyContact(emergency_contact)} className={`px-8 ${isDarkMode ? 'bg-pink-600 hover:bg-pink-500 text-white' : 'text-gray-700'}`}>
+              <Button size="lg" onClick={() => handleSetEmergencyContact(emergency_contact)} className={`px-8 ${isDarkMode ? 'bg-pink-600 hover:bg-pink-500 text-white' : 'text-gray-700'}`}>
                 Save All Settings
               </Button>
             </div>

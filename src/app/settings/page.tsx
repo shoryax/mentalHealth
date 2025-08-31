@@ -53,10 +53,6 @@ const Settings = () => {
     } else {
       console.log("Contacts saved");
     }
-    if (data) {
-      if (data.emergencycontact) setEmergencyContact(data.emergencycontact);
-      if (data.therapistcontact) setTherapistContact(data.therapistcontact);
-    }
   }
 
   const settingsSections = [

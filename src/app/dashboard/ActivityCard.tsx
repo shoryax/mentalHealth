@@ -102,7 +102,7 @@ export default function ActivityCard({ activity, userId, onToggleFavorite, onInc
                         {
                             user_id: userId,
                             activity_id: activity.id,
-                            category: activity.category,
+                            activity_category: activity.category,
                             started_at: new Date().toISOString(),
                             compToday: 1,
                         }

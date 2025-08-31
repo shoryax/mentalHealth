@@ -14,6 +14,7 @@ import { Separator } from '@/components/ui/separator';
 import Header from '../../components/Header';
 import { supabase } from "@/lib/supabaseClient";
 import { useDarkMode } from '@/components/DarkModeProvider';
+import { data } from 'react-router';
 
 const Settings = () => {
   const [dailyReminders, setDailyReminders] = useState(true);
@@ -32,14 +33,29 @@ const Settings = () => {
   const [emergency_contact, setEmergencyContact] = useState("");
 
   const handleSetEmergencyContact = async (emergency_contact: string) => {
+    if (!user) {
+      console.warn("User not loaded yet");
+      return;
+    }
+    if (!emergency_contact.trim()) {
+      console.warn("Emergency contact empty");
+    }
     const { error: insertError } = await supabase
       .from("userSettings")
-      .insert([
-        { user_id: user.id, 
-          emergencyContact: emergency_contact.trim() || null },
-      ])
+      .upsert({
+        user_id: user.id,
+        emergencycontact: emergency_contact.trim(),
+        therapistcontact: therapist_contact.trim(),
+        updated_at: new Date().toISOString()
+      },)
     if (insertError) {
       console.error("Error inserting emergency contact", insertError.message);
+    } else {
+      console.log("Contacts saved");
+    }
+    if (data) {
+      if (data.emergencycontact) setEmergencyContact(data.emergencycontact);
+      if (data.therapistcontact) setTherapistContact(data.therapistcontact);
     }
   }
 
@@ -60,7 +76,7 @@ const Settings = () => {
       description: 'Manage your profile visibility and privacy settings',
       settings: [
         { type: 'switch', label: 'Allow Data Sharing for Research', value: true },
-        { type: 'input', label: 'Emergency Contact', placeholder: 'Enter phone number' }
+  { type: 'input', label: 'Emergency Contact', placeholder: 'Enter phone number', value: emergency_contact, onChange: (e: any) => setEmergencyContact(e.target.value) }
       ]
     },
     {
@@ -83,7 +99,7 @@ const Settings = () => {
       description: 'Personalize your mental health journey',
       settings: [
         { type: 'select', label: 'Preferred Coping Strategies', options: ['breathing', 'meditation', 'journaling', 'exercise'] },
-        { type: 'input', label: 'Therapist Contact', placeholder: 'Enter therapist info' },
+  { type: 'input', label: 'Therapist Contact', placeholder: 'Enter therapist info', value: therapist_contact, onChange: (e: any) => setTherapistContact(e.target.value) },
         { type: 'switch', label: 'Therapy Session Reminders', value: false },
         { type: 'select', label: 'Crisis Support Level', options: ['minimal', 'moderate', 'intensive'] }
       ]
@@ -168,7 +184,12 @@ const Settings = () => {
         return (
           <div key={index} className="py-2">
             <Label className="text-sm font-medium mb-2 block text-gray-700">{setting.label}</Label>
-            <Input placeholder={setting.placeholder} className="text-gray-400"/>
+            <Input
+              placeholder={setting.placeholder}
+              className="text-gray-400"
+              value={setting.value}
+              onChange={setting.onChange}
+            />
           </div>
         );
       case 'button':

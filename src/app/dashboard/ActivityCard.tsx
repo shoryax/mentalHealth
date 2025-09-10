@@ -20,7 +20,7 @@ interface ActivityCardProps {
     activity: Activity;
     onToggleFavorite: (id: string) => void;
     userId: string;
-    onIncrementDoneToday?: () => void; // callback to bump doneToday state in parent (also used to bump weekly)
+    onIncrementDoneToday?: () => void;
 }
 
 const getCategoryGradient = (category: string) => {
@@ -66,7 +66,6 @@ export default function ActivityCard({ activity, userId, onToggleFavorite, onInc
             .insert([
                 {
                     user_id: userId,
-                    activity_id: activity.id,
                     category: activity.category,
                     started_at: new Date().toISOString(),
                 }
@@ -95,7 +94,6 @@ export default function ActivityCard({ activity, userId, onToggleFavorite, onInc
                     console.error("Failed to update compToday:", updateError.message);
                 }
             } else {
-                // If no row found, optionally create one with compToday = 1 (comment out if undesired)
                 const { error: createError } = await supabase
                     .from("userStats")
                     .insert([
@@ -115,7 +113,6 @@ export default function ActivityCard({ activity, userId, onToggleFavorite, onInc
             console.error("Unexpected error updating compToday", e);
         }
 
-    // 3. Notify parent so local UI state (doneToday & weekly) increments immediately
     onIncrementDoneToday && onIncrementDoneToday();
         setShowModal(true);
     };

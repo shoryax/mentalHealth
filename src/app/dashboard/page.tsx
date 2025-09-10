@@ -10,7 +10,6 @@ import SearchBar from "./SearchBar";
 import StatsCards from "./StatsCards";
 import { activities as rawActivities, dailyGoal } from "../../../data/data";
 
-// Types
 interface Activity {
   id: string;
   title: string;
@@ -48,7 +47,73 @@ export default function MentalWellnessDashboard() {
   );
   const [weeklyCompleted, setWeeklyCompleted] = useState<number>(0);
 
-  const incrementDoneToday = () => setCompletedToday(prev => prev + 1);
+  // Increment done_today and times_done for a specific activity
+  const incrementDoneToday = async (activity: Activity) => {
+    if (!user || !activity) return;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // Try to find today's userStats row for this activity
+    const { data, error } = await supabase
+      .from("userStats")
+      .select("done_today, timesDone, started_at")
+      .eq("user_id", user.id)
+      .eq("activity_id", activity.id)
+      .gte("started_at", today.toISOString())
+      .maybeSingle();
+    if (error) {
+      console.error("Error fetching today's stats", error.message);
+      return;
+    }
+    if (data) {
+      // Update using user_id, activity_id, started_at as keys
+      const { error: updateError } = await supabase
+        .from("userStats")
+        .update({
+          done_today: (data.done_today || 0) + 1,
+          timesDone: (data.timesDone || 0) + 1,
+          category: activity.category
+        })
+        .eq("user_id", user.id)
+        .eq("activity_id", activity.id)
+        .eq("started_at", data.started_at);
+      if (!updateError) {
+        // Fetch the updated value from DB
+        const { data: updated, error: fetchError } = await supabase
+          .from("userStats")
+          .select("done_today, timesDone")
+          .eq("user_id", user.id)
+          .eq("activity_id", activity.id)
+          .eq("started_at", data.started_at)
+          .maybeSingle();
+        if (updated && updated.done_today != null) setCompletedToday(updated.done_today);
+        // Optionally: setTimesDone(updated.timesDone) if you want to show it
+      }
+    } else {
+      // Insert new row for today/activity
+      const { error: insertError } = await supabase
+        .from("userStats")
+        .insert({
+          user_id: user.id,
+          activity_id: activity.id,
+          category: activity.category,
+          started_at: today.toISOString(),
+          done_today: 1,
+          timesDone: 1
+        });
+      if (!insertError) {
+        // Fetch the inserted value from DB
+        const { data: inserted, error: fetchError } = await supabase
+          .from("userStats")
+          .select("done_today, timesDone")
+          .eq("user_id", user.id)
+          .eq("activity_id", activity.id)
+          .eq("started_at", today.toISOString())
+          .maybeSingle();
+        if (inserted && inserted.done_today != null) setCompletedToday(inserted.done_today);
+        // Optionally: setTimesDone(inserted.timesDone) if you want to show it
+      }
+    }
+  };
   const incrementWeekly = () => setWeeklyCompleted(prev => prev + 1);
 
   const filteredActivities = activities.filter((activity: Activity) => {
@@ -196,7 +261,7 @@ export default function MentalWellnessDashboard() {
                 activity={activity}
                 onToggleFavorite={() => toggleFavorite}
                 userId={user?.id || ''}
-                onIncrementDoneToday={() => { incrementDoneToday(); incrementWeekly(); }}
+                onIncrementDoneToday={() => { incrementDoneToday(activity); incrementWeekly(); }}
               />
             ))}
           </div>
@@ -226,7 +291,7 @@ export default function MentalWellnessDashboard() {
                     activity={activity}
                     onToggleFavorite={toggleFavorite}
                     userId={user?.id || ''}
-                    onIncrementDoneToday={() => { incrementDoneToday(); incrementWeekly(); }}
+                    onIncrementDoneToday={() => { incrementDoneToday(activity); incrementWeekly(); }}
                   />
                 ))}
             </div>

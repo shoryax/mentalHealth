@@ -14,7 +14,6 @@ import { Separator } from '@/components/ui/separator';
 import Header from '../../components/Header';
 import { supabase } from "@/lib/supabaseClient";
 import { useDarkMode } from '@/components/DarkModeProvider';
-import { data } from 'react-router';
 
 const Settings = () => {
   const [dailyReminders, setDailyReminders] = useState(true);

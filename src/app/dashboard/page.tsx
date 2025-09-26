@@ -86,10 +86,8 @@ export default function MentalWellnessDashboard() {
           .eq("started_at", data.started_at)
           .maybeSingle();
         if (updated && updated.done_today != null) setCompletedToday(updated.done_today);
-        // Optionally: setTimesDone(updated.timesDone) if you want to show it
       }
     } else {
-      // Insert new row for today/activity
       const { error: insertError } = await supabase
         .from("userStats")
         .insert({

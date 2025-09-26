@@ -11,48 +11,228 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import Header from '../../components/Header';
+import Header from '@/components/Header';
 import { supabase } from "@/lib/supabaseClient";
 import { useDarkMode } from '@/components/DarkModeProvider';
 
 const Settings = () => {
   const [dailyReminders, setDailyReminders] = useState(true);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [therapist_contact, setTherapistContact] = useState("");
+  const [emergency_contact, setEmergencyContact] = useState("");
 
   const [user, setUser] = useState<any>(null);
+  
   useEffect(() => {
     const getUser = async () => {
       const { data } = await supabase.auth.getUser();
       setUser(data.user);
+      
+      // Load existing settings if user exists
+      if (data.user) {
+        await loadUserSettings(data.user.id);
+      }
     }
     getUser();
   }, []);
 
-  const [therapist_contact, setTherapistContact] = useState("");
-  const [emergency_contact, setEmergencyContact] = useState("");
+  const loadUserSettings = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("userSettings")
+      .select("*")
+      .eq("user_id", userId)
+      .single();
+    
+    if (data) {
+      setEmergencyContact(data.emergency_contact || "");
+      setTherapistContact(data.therapist_contact || "");
+    }
+  };
 
-  const handleSetEmergencyContact = async (emergency_contact: string) => {
+
+
+
+
+  
+  const handleSetEmergencyContact = async () => {
+    setSubmitting(true);
+    setError(null);
+
     if (!user) {
       console.warn("User not loaded yet");
+      setError("User not loaded yet");
+      setSubmitting(false);
       return;
     }
+
     if (!emergency_contact.trim()) {
       console.warn("Emergency contact empty");
+      setError("Emergency contact cannot be empty");
+      setSubmitting(false);
+      return;
     }
-    const { error: insertError } = await supabase
+
+    // Try to update first, if no rows affected, then insert
+    const { data: updateData, error: updateError } = await supabase
       .from("userSettings")
-      .upsert({
-        user_id: user.id,
-        emergencycontact: emergency_contact.trim(),
-        therapistcontact: therapist_contact.trim(),
+      .update({
+        emergency_contact: emergency_contact,
         updated_at: new Date().toISOString()
-      },)
-    if (insertError) {
-      console.error("Error inserting emergency contact", insertError.message);
-    } else {
-      console.log("Contacts saved");
+      })
+      .eq("user_id", user.id);
+
+    if (updateError) {
+      // If update fails, try insert
+      const { data: insertData, error: insertError } = await supabase
+        .from("userSettings")
+        .insert([
+          {
+            user_id: user.id,
+            emergency_contact: emergency_contact,
+            updated_at: new Date().toISOString()
+          }
+        ]);
+
+      if (insertError) {
+        console.error("Error saving emergency contact", insertError);
+        setError(insertError.message);
+        setSubmitting(false);
+        return;
+      }
     }
+
+    console.log("Emergency contact saved successfully");
+    setError(null);
+    setSubmitting(false);
   }
+
+
+
+
+
+
+  const handleTherapistContact = async () => {
+    setSubmitting(true);
+    setError(null);
+
+    if (!user) {
+      console.warn("User not loaded yet");
+      setError("User not loaded yet");
+      setSubmitting(false);
+      return;
+    }
+
+    if (!therapist_contact.trim()) {
+      console.warn("Therapist contact empty");
+      setError("Therapist contact cannot be empty");
+      setSubmitting(false);
+      return;
+    }
+
+    // Try to update first, if no rows affected, then insert
+    const { data: updateData, error: updateError } = await supabase
+      .from("userSettings")
+      .update({
+        therapist_contact: therapist_contact,
+        updated_at: new Date().toISOString()
+      })
+      .eq("user_id", user.id);
+
+    if (updateError) {
+      // If update fails, try insert
+      const { data: insertData, error: insertError } = await supabase
+        .from("userSettings")
+        .insert([
+          {
+            user_id: user.id,
+            therapist_contact: therapist_contact,
+            updated_at: new Date().toISOString()
+          }
+        ]);
+
+      if (insertError) {
+        console.error("Error saving therapist contact", insertError);
+        setError(insertError.message);
+        setSubmitting(false);
+        return;
+      }
+    }
+
+    console.log("Therapist contact saved successfully");
+    setError(null);
+    setSubmitting(false);
+  }
+
+
+
+
+
+
+  const handleSaveAllSettings = async () => {
+    setSubmitting(true);
+    setError(null);
+
+    if (!user) {
+      setError("User not loaded yet");
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      // First try to update existing record
+      const { data: existingData } = await supabase
+        .from("userSettings")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+
+      if (existingData) {
+        // Update existing record
+        const { error: updateError } = await supabase
+          .from("userSettings")
+          .update({
+            emergency_contact: emergency_contact || null,
+            therapist_contact: therapist_contact || null,
+            updated_at: new Date().toISOString()
+          })
+          .eq("user_id", user.id);
+
+        if (updateError) {
+          throw updateError;
+        }
+      } else {
+        // Insert new record
+        const { error: insertError } = await supabase
+          .from("userSettings")
+          .insert([
+            {
+              user_id: user.id,
+              emergency_contact: emergency_contact || null,
+              therapist_contact: therapist_contact || null,
+              updated_at: new Date().toISOString()
+            }
+          ]);
+
+        if (insertError) {
+          throw insertError;
+        }
+      }
+
+      console.log("All settings saved successfully");
+      setError(null);
+    } catch (err: any) {
+      console.error("Error saving settings:", err);
+      setError(err.message || "An unexpected error occurred");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+
+
+
 
   const settingsSections = [
     {
@@ -295,8 +475,17 @@ const Settings = () => {
             </Card>
 
             <div className="flex justify-center pt-6">
-              <Button size="lg" onClick={() => handleSetEmergencyContact(emergency_contact)} className={`px-8 ${isDarkMode ? 'bg-pink-600 hover:bg-pink-500 text-white' : 'text-gray-700'}`}>
-                Save All Settings
+              {error && (
+                <div className={`mb-4 p-3 rounded-md ${isDarkMode ? 'bg-red-900/50 border border-red-600 text-red-300' : 'bg-red-50 border border-red-200 text-red-700'}`}>
+                  {error}
+                </div>
+              )}
+              <Button
+                size="lg"
+                onClick={handleSaveAllSettings}
+                className={`px-8 ${isDarkMode ? 'bg-pink-600 hover:bg-pink-500 text-white' : 'text-gray-700'}`}
+                disabled={submitting}>
+                {submitting ? 'Saving...' : 'Save All Settings'}
               </Button>
             </div>
           </div>

@@ -243,7 +243,10 @@ const Settings = () => {
           <div key={index} className="py-2">
             <Button
               variant={setting.variant || 'outline'}
-              className={`w-full ${setting.variant === 'destructive' ? '' : 'bg-gray-400 hover:bg-gray-500 text-white'}`}
+              className={`w-full ${
+                setting.variant === 'destructive' ? isDarkMode ? 'bg-red-800 hover:bg-red-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'
+                                                  : isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+              }`}
             >
               {setting.label}
             </Button>
@@ -255,7 +258,7 @@ const Settings = () => {
   };
   return (
     <div className=''>
-      <TwinklingStars />
+      {isDarkMode && <TwinklingStars />}
       <div className='py-14'>
         <Header />
       </div>
@@ -284,6 +287,7 @@ const Settings = () => {
               {settingsSections.map((section) => {
                 const IconComponent = section.icon;
                 return (
+                  //nigga is the card here to modify
                   <Card key={section.id} className={`h-fit ${isDarkMode ? 'bg-gray-900/50 nigga backdrop-blur-lg border-gray-700' : 'ng-white border-gray-300'}`}>
                     <CardHeader>
                       <div className="flex items-center space-x-3">

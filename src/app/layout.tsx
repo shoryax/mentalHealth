@@ -1,7 +1,7 @@
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import { DarkModeProvider } from "@/components/DarkModeProvider";
 import './globals.css';
-
+import TwinklingStars from "./settings/twinkle";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="font-satoshi">
@@ -10,6 +10,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <DarkModeProvider>
+          <TwinklingStars />
           <div className="relative z-10">{children}</div>
         </DarkModeProvider>
       </body>

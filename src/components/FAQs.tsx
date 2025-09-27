@@ -7,6 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import TwinklingStars from '@/app/settings/twinkle';
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const FAQ = () => {
@@ -50,6 +51,7 @@ const FAQ = () => {
       className={`bg py-12 transition-all duration-500 ease-out ${sectionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <TwinklingStars />
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4">
             Frequently Asked Questions

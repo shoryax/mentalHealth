@@ -1,10 +1,12 @@
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import TwinklingStars from '@/app/settings/twinkle';
 
 const Hero = () => {
   return (
     <section id="home" className="py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <TwinklingStars />
         <div className="text-center">
           <div className="flex justify-center mb-6">
             <div className="p-4 rounded-full">

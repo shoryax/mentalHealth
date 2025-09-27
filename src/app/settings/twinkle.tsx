@@ -4,7 +4,7 @@ import './twinkle.css';
 const TwinklingStars = () => {
   return (
     <div className="stars-container">
-      {Array.from({ length: 100 }, (_, i) => (
+      {Array.from({ length: 50 }, (_, i) => (
         <div
           key={i}
           className="star"

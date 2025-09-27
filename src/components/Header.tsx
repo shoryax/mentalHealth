@@ -122,7 +122,7 @@ const Header = () => {
                     <User className={`h-6 w-6 ${isDarkMode ? 'text-pink-300' : 'text-pink-100'}`} />
                   )}
                   <span className={`text-sm rounded-full px-2 py-1 transition-colors duration-300 ${isDarkMode
-                    ? 'text-white bg-pink-900/50'
+                    ? 'text-white '
                     : 'text-gray-700 bg-pink-100'
                     }`}>
                     {displayName}

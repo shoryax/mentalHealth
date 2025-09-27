@@ -68,7 +68,6 @@ const Header = () => {
               Cards for Mental Health
             </span>
           </div>
-
           <nav className="hidden md:flex space-x-7 items-center">
             <a href="/" className={`hover:text-pink-600 transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'
               }`}>

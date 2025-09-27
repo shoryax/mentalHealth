@@ -10,7 +10,8 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import  Header  from '@/components/../components/Header';
+import Header from '@/components/../components/Header';
+import TwinklingStars from './twinkle';
 import { supabase } from "@/lib/supabaseClient";
 import { useDarkMode } from '@/components/DarkModeProvider';
 import { useSettingsHandlers } from './handle';
@@ -156,7 +157,7 @@ const Settings = () => {
       description: 'Set your language and regional preferences',
       settings: [
         { type: 'select', label: 'Language', options: ['english', 'spanish', 'french', 'german', 'chinese'] },
-        { type: 'select', label: 'Timezone', options: ['UTC', 'EST', 'PST', 'CET', 'JST'] },
+        { type: 'select', label: 'Timezone', options: ['ET', 'PT', 'CT', 'JT'] },
         { type: 'switch', label: 'Show Local Resources', value: true },
         { type: 'select', label: 'Cultural Considerations', options: ['Western', 'Eastern', 'Multicultural'] }
       ]
@@ -181,7 +182,7 @@ const Settings = () => {
         return (
           <div key={index} className={`flex items-center justify-between py-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'
             }`}>
-            <Label htmlFor={`setting-${index}`} className="text-sm font-medium text-gray-400">
+            <Label htmlFor={`setting-${index}`} className={`text-sm font-medium ${isDarkMode ? 'text-white/90' : 'text-gray-800'}`}>
               {setting.label}
             </Label>
             <Switch
@@ -194,14 +195,14 @@ const Settings = () => {
       case 'select':
         return (
           <div key={index} className="py-2">
-            <Label className="text-sm font-medium mb-2 block text-gray-700">{setting.label}</Label>
+            <Label className={`text-sm font-medium mb-2 block ${isDarkMode ? 'text-white/90' : 'text-gray-800'}`}>{setting.label}</Label>
             <Select defaultValue={setting.value || setting.options?.[0]}>
-              <SelectTrigger className="text-gray-700">
+              <SelectTrigger className={`${isDarkMode ? 'text-white/60' : 'text-gray-900'}`}>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'}`}>
                 {setting.options?.map((option: string) => (
-                  <SelectItem key={option} value={option} className="text-gray-700">
+                  <SelectItem key={option} value={option} className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                     {option.charAt(0).toUpperCase() + option.slice(1).replace('-', ' ')}
                   </SelectItem>
                 ))}
@@ -228,7 +229,7 @@ const Settings = () => {
       case 'input':
         return (
           <div key={index} className="py-2">
-            <Label className="text-sm font-medium mb-2 block text-gray-700">{setting.label}</Label>
+            <Label className={`text-sm font-medium mb-2 block ${isDarkMode ? 'text-white/70' : 'text-gray-800'}`}>{setting.label}</Label>
             <Input
               placeholder={setting.label}
               className="text-gray-400"
@@ -254,6 +255,7 @@ const Settings = () => {
   };
   return (
     <div className=''>
+      <TwinklingStars />
       <div className='py-14'>
         <Header />
       </div>
@@ -282,7 +284,7 @@ const Settings = () => {
               {settingsSections.map((section) => {
                 const IconComponent = section.icon;
                 return (
-                  <Card key={section.id} className={`h-fit ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                  <Card key={section.id} className={`h-fit ${isDarkMode ? 'bg-gray-900/50 nigga backdrop-blur-lg border-gray-700' : 'ng-white border-gray-300'}`}>
                     <CardHeader>
                       <div className="flex items-center space-x-3">
                         <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-blue-100'} p-2 rounded-lg`}>

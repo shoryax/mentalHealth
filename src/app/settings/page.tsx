@@ -10,7 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import Header from '@/components/Header';
+import  Header  from '@/components/../components/Header';
 import { supabase } from "@/lib/supabaseClient";
 import { useDarkMode } from '@/components/DarkModeProvider';
 import { useSettingsHandlers } from './handle';
@@ -258,7 +258,7 @@ const Settings = () => {
         <Header />
       </div>
       <div className={`min-h-screen bg-gradient-to-br`}>
-        <div className={`fix backdrop-blur-sm shadow-sm sticky top-0 z-50 ${isDarkMode ? 'bg-inherit' : 'bg-white'}`}>
+        <div className={`fix shadow-sm sticky top-0 z-50 ${isDarkMode ? 'bg-inherit' : 'bg-white'}`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-4">

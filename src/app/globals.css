@@ -2,15 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @import '@tailwindcss'; */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-/* .dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-} */
+.header {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll if any */
+  overflow-y: scroll; /* Fallback for older browsers */
+  scrollbar-gutter: stable both-edges; /* Reserves space on both sides for consistency */
+}
+
 
 body {
   background: var(--background);

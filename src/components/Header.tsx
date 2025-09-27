@@ -7,7 +7,6 @@ import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
 import { useDarkMode } from './DarkModeProvider';
 
-//fifi
 const Header = () => {
   const [user, setUser] = useState<any>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -56,7 +55,7 @@ const Header = () => {
   const displayName = fullName ? fullName.split(' ')[0] : user?.email;
 
   return (
-    <header className={`fixed top-0 left-0 right-0 w-3/4 mx-auto mt-8 mb-16 backdrop-blur-lg shadow-xl rounded-2xl z-50 transition-colors duration-300 ${isDarkMode
+    <header className={`fixed top-0 left-1/2 -translate-x-1/2 w-3/4 mt-8 mb-16 backdrop-blur-lg shadow-xl rounded-2xl z-50 transition-colors duration-300 ${isDarkMode
       ? 'bg-gray-900/20 text-white'
       : 'bg-white/5 text-gray-700'
       }`}>

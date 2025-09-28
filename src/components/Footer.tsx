@@ -3,8 +3,10 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer id="contact" className="bg-gray-900 text-white py-16">
-      <div className="w-[100%] mx-auto px-4 sm:px-6 lg:px-8">
+    <div className='w-[97%] flex justify-center mx-auto'>
+      <footer id="contact" className="bg-[#1e1d22] flex w-[100%] items-center justify-center rounded-[15px] text-white py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
@@ -14,7 +16,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-300 mb-6 max-w-md">
-              Supporting mental wellness through thoughtfully designed resources and tools. 
+              Supporting mental wellness through thoughtfully designed resources and tools.
               Your journey to better mental health starts here.
             </p>
             <div className="space-y-3">
@@ -32,7 +34,7 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
@@ -42,7 +44,7 @@ const Footer = () => {
               <li><a href="#about" className="text-gray-300 hover:text-white transition-colors">About</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
@@ -53,8 +55,8 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+
+        <div className="border-t border-gray-700 mt-12 pt-8 text-center">
           <p className="text-gray-400">
             © 2025 Cards for Mental Health. Made with ❤️ for mental wellness.
           </p>
@@ -64,6 +66,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </div>
   );
 };
 

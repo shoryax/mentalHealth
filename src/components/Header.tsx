@@ -55,7 +55,7 @@ const Header = () => {
   const displayName = fullName ? fullName.split(' ')[0] : user?.email;
 
   return (
-    <header className={`fixed top-0 left-1/2 -translate-x-1/2 w-3/4 mt-8 mb-16 backdrop-blur-lg shadow-xl rounded-2xl z-50 transition-colors duration-300 ${isDarkMode
+    <header className={`fixed top-0 left-1/2 -translate-x-1/2 w-3/4 mt-8 mb-16 backdrop-blur-lg rounded-2xl z-50 transition-colors duration-300 ${isDarkMode
       ? 'bg-gray-900/20 text-white'
       : 'bg-white/5 text-gray-700'
       }`}>
@@ -109,7 +109,7 @@ const Header = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className={`flex items-center space-x-2 px-2 py-1.5 rounded hover:bg-opacity-20 transition-colors duration-300 ${isDarkMode ? 'hover:bg-white/20' : 'hover:bg-gray-200'
+                  className={`flex items-center bg-pink-100 rounded-lg space-x-2 px-2 py-1.5 hover:bg-opacity-20 transition-colors duration-300 ${isDarkMode ? 'hover:bg-white/20' : 'hover:bg-gray-200'
                     }`}
                 >
                   {profileUrl ? (
@@ -121,9 +121,9 @@ const Header = () => {
                   ) : (
                     <User className={`h-6 w-6 ${isDarkMode ? 'text-pink-300' : 'text-pink-100'}`} />
                   )}
-                  <span className={`text-sm rounded-full px-2 py-1 transition-colors duration-300 ${isDarkMode
+                  <span className={`text-sm px-2 py-1 transition-colors duration-300 ${isDarkMode
                     ? 'text-white '
-                    : 'text-gray-700 bg-pink-100'
+                    : 'text-[#000000]'
                     }`}>
                     {displayName}
                   </span>

@@ -4,7 +4,7 @@
 
 /* @import '@tailwindcss'; */
 :root {
-  --background: #ffffff;
+  --background: rgb(219, 230, 237);
   --foreground: #171717;
 }
 
@@ -13,13 +13,14 @@
   transform: translateX(-50%);
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden; /* Prevent horizontal scroll if any */
-  overflow-y: scroll; /* Fallback for older browsers */
-  scrollbar-gutter: stable both-edges; /* Reserves space on both sides for consistency */
+  overflow-x: hidden;
+  /* Prevent horizontal scroll if any */
+
 }
 
 
@@ -31,6 +32,7 @@ body {
   padding: 0;
   min-height: 100vh;
 }
+
 .sign-in {
   display: flex;
   align-items: center;
@@ -38,17 +40,38 @@ body {
   border-radius: 0.375rem;
   transition: background-color 0.3s ease;
 }
-  
-/* In your CSS (globals.css or Tailwind config) */
+
 .dark {
   --background: #0F0F1A;
-  --foreground: #F0F0E5;
+  --foreground: rgb(219, 230, 237);
 }
 
 .bg-light {
-  background-color: #F0F0E5;
+  background-color: rgb(219, 230, 237);
 }
 
 .nigga {
   opacity: 0.9;
 }
+
+
+@keyframes scroll {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 17s linear infinite;
+}
+
+/* In your CSS (globals.css or Tailwind config) 
+  overflow-y: scroll; /* Fallback for older browsers */
+/* scrollbar-gutter: stable both-edges; Reserves space on both sides for consistency 
+
+      this is the reason for the scrollbar to show up and distort the page
+*/

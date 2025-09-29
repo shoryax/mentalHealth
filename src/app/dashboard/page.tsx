@@ -67,7 +67,7 @@ export default function MentalWellnessDashboard() {
       .from('userStats')
       .upsert({ 
         user_id: user.id, 
-        done_today: newCount || 0,
+        done_today: newCount,
         activity_id: activity.id,
         category: activity.category 
       }, { onConflict: 'user_id' });

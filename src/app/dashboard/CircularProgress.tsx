@@ -2,7 +2,7 @@ import React, { useState, useEffect} from "react";
 import { supabase } from "../../lib/supabaseClient";
 
 interface CircularProgressProps {
-    value: number;
+    value?: number;
     size?: number;
 }
 
@@ -12,6 +12,7 @@ export default function CircularProgress({ value, size = 80 }: CircularProgressP
     const radius = (size - 8) / 2;
     const circumference = radius * 2 * Math.PI;
     const offset = Math.floor(circumference - (progressPercentage / 100) * circumference);
+
 
     return (
         <div className="relative inline-flex items-center justify-center">

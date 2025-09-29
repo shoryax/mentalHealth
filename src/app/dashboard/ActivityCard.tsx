@@ -20,7 +20,6 @@ interface ActivityCardProps {
     activity: Activity;
     onToggleFavorite: (id: string) => void;
     userId: string;
-    onIncrementDoneToday?: () => void;
 }
 
 const getCategoryGradient = (category: string) => {
@@ -56,7 +55,7 @@ const getCategoryIcon = (category: string) => {
     return icons[category as keyof typeof icons] || Heart
 }
 
-export default function ActivityCard({ activity, userId, onToggleFavorite, onIncrementDoneToday }: ActivityCardProps) {
+export default function ActivityCard({ activity, userId, onToggleFavorite }: ActivityCardProps) {
     const [showModal, setShowModal] = useState(false);
     const Icon = getCategoryIcon(activity.category);
 

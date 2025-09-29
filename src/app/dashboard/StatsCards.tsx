@@ -1,4 +1,3 @@
-// components/StatsCards.tsx
 "use client";
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,7 +10,6 @@ interface StatsCardsProps {
   weeklyCompleted: number;
 }
 
-// ...existing code...
 export default function StatsCards({ completedToday, dailyGoal, weeklyCompleted }: StatsCardsProps) {
   const progressPercentage = Math.floor((completedToday / dailyGoal) * 100);
 
@@ -74,4 +72,3 @@ export default function StatsCards({ completedToday, dailyGoal, weeklyCompleted 
     </div>
   );
 }
-//

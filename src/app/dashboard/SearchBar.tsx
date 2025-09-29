@@ -1,12 +1,10 @@
-// components/SearchBar.tsx
 "use client";
 import React from "react";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
 
 interface SearchBarProps {
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<any>) => void;
 }
 
 export default function SearchBar({ value, onChange }: SearchBarProps) {

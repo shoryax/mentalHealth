@@ -20,7 +20,7 @@ interface Activity {
   isFavorite: boolean;
   completedToday?: boolean;
   difficulty: "beginner" | "intermediate" | "advanced";
-  link?: string; // optional video linkj
+  link?: string;
 }
 
 const activities: Activity[] = rawActivities.map((activity: any) => ({
@@ -42,77 +42,43 @@ export default function MentalWellnessDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [completedToday, setCompletedToday] = useState(
-    activities.filter((activity: Activity) => activity.completedToday).length
-  );
-  const [weeklyCompleted, setWeeklyCompleted] = useState<number>(0);
+  const [doneToday, setDoneToday] = useState(0);
+  const [weeklyCompleted, setWeeklyCompleted] = useState<any>(0);
 
-  // Increment done_today and times_done for a specific activity
-  const incrementDoneToday = async (activity: Activity) => {
-    if (!user || !activity) return;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    // Try to find today's userStats row for this activity
+  const incrementCount = async (activity: Activity) => {
+    //what's activity and Activity here? or what's its type?
+    if (!user) return;
+
     const { data, error } = await supabase
-      .from("userStats")
-      .select("done_today, timesDone, started_at")
-      .eq("user_id", user.id)
-      .eq("activity_id", activity.id)
-      .gte("started_at", today.toISOString())
-      .maybeSingle();
-    if (error) {
-      console.error("Error fetching today's stats", error.message);
+      .from('userStats')
+      .select('done_today')
+      .eq('user_id', user.id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      console.error('Error fetching done_today:', error);
       return;
     }
-    if (data) {
-      // Update using user_id, activity_id, started_at as keys
-      const { error: updateError } = await supabase
-        .from("userStats")
-        .update({
-          done_today: (data.done_today || 0) + 1,
-          timesDone: (data.timesDone || 0) + 1,
-          category: activity.category
-        })
-        .eq("user_id", user.id)
-        .eq("activity_id", activity.id)
-        .eq("started_at", data.started_at);
-      if (!updateError) {
-        // Fetch the updated value from DB
-        const { data: updated, error: fetchError } = await supabase
-          .from("userStats")
-          .select("done_today, timesDone")
-          .eq("user_id", user.id)
-          .eq("activity_id", activity.id)
-          .eq("started_at", data.started_at)
-          .maybeSingle();
-        if (updated && updated.done_today != null) setCompletedToday(updated.done_today);
-      }
+
+    const currentCount = data?.done_today || 0;
+    const newCount = currentCount + 1;
+
+    const { error: upsertError } = await supabase
+      .from('userStats')
+      .upsert({ 
+        user_id: user.id, 
+        done_today: newCount || 0,
+        activity_id: activity.id,
+        category: activity.category 
+      }, { onConflict: 'user_id' });
+
+    if (upsertError) {
+      console.error('Error updating done_today:', upsertError);
     } else {
-      const { error: insertError } = await supabase
-        .from("userStats")
-        .insert({
-          user_id: user.id,
-          activity_id: activity.id,
-          category: activity.category,
-          started_at: today.toISOString(),
-          done_today: 1,
-          timesDone: 1
-        });
-      if (!insertError) {
-        // Fetch the inserted value from DB
-        const { data: inserted, error: fetchError } = await supabase
-          .from("userStats")
-          .select("done_today, timesDone")
-          .eq("user_id", user.id)
-          .eq("activity_id", activity.id)
-          .eq("started_at", today.toISOString())
-          .maybeSingle();
-        if (inserted && inserted.done_today != null) setCompletedToday(inserted.done_today);
-        // Optionally: setTimesDone(inserted.timesDone) if you want to show it
-      }
+      console.log('✨ Updated done_today count!');
+      setDoneToday(newCount);
     }
   };
-  const incrementWeekly = () => setWeeklyCompleted(prev => prev + 1);
 
   const filteredActivities = activities.filter((activity: Activity) => {
     const matchesSearch =
@@ -146,24 +112,24 @@ export default function MentalWellnessDashboard() {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
       if (user) {
+        const { data: statsData, error: statsError } = await supabase
+          .from('userStats')
+          .select('done_today')
+          .eq('user_id', user.id)
+          .single();
+
+        if (statsError && statsError.code !== 'PGRST116') {
+          console.error('Error fetching initial done_today:', statsError);
+        } else if (statsData) {
+          setDoneToday(statsData.done_today || 0);
+        }
+
         const { data } = await supabase
           .from("dataTable")
           .select("activity_id")
           .eq("user_id", user.id);
         if (data) {
           setFavorites(data.map((item: any) => item.activity_id));
-        }
-
-        const weekAgo = new Date();
-        weekAgo.setHours(0, 0, 0, 0);
-        weekAgo.setDate(weekAgo.getDate() - 6); // 7-day window
-        const { data: weeklyData, error: weeklyError } = await supabase
-          .from("userStats")
-          .select("id, started_at")
-          .eq("user_id", user.id)
-          .gte("started_at", weekAgo.toISOString());
-        if (!weeklyError && weeklyData) {
-          setWeeklyCompleted(weeklyData.length);
         }
       }
     };
@@ -208,13 +174,12 @@ export default function MentalWellnessDashboard() {
     <div>
       <Header />
       <main className="max-w-7xl mt-14 mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section */}
         <div className="text-center mt-10 mb-12">
           <div className="flex items-center justify-center gap-2 mb-4">
             <GreetingIcon className="h-6 w-6 text-amber-500" />
             <span className="text-lg font-medium text-gray-600">{greeting}, {displayName}</span>
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-2">
+          <h2 className="text-4xl font-bold text-gray-500 mb-2">
             What would you like to
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               {" "}
@@ -224,15 +189,12 @@ export default function MentalWellnessDashboard() {
           </h2>
           <p className="text-lg text-gray-600 mb-8">{message}</p>
 
-          {/* Search Bar */}
           <SearchBar value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
 
-          {/* Quick Actions */}
           <QuickActions selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
         </div>
 
-        {/* Stats Cards */}
-        <StatsCards completedToday={completedToday} dailyGoal={dailyGoal} weeklyCompleted={weeklyCompleted} />
+        <StatsCards completedToday={doneToday} dailyGoal={dailyGoal} weeklyCompleted={weeklyCompleted} />
 
         {/* Activities Section */}
         <div className="mb-8">
@@ -259,7 +221,6 @@ export default function MentalWellnessDashboard() {
                 activity={activity}
                 onToggleFavorite={() => toggleFavorite}
                 userId={user?.id || ''}
-                onIncrementDoneToday={() => { incrementDoneToday(activity); incrementWeekly(); }}
               />
             ))}
           </div>
@@ -289,7 +250,6 @@ export default function MentalWellnessDashboard() {
                     activity={activity}
                     onToggleFavorite={toggleFavorite}
                     userId={user?.id || ''}
-                    onIncrementDoneToday={() => { incrementDoneToday(activity); incrementWeekly(); }}
                   />
                 ))}
             </div>

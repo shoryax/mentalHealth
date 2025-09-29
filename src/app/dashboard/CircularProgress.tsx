@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
+import { supabase } from "../../lib/supabaseClient";
 
-export default function CircularProgress({ value, size = 80 }: { value: number; size?: number }) {
-    // value is already a percentage (0-100) from caller
+interface CircularProgressProps {
+    value: number;
+    size?: number;
+}
+
+// const [user, setUser] = useState<any>(null);
+export default function CircularProgress({ value, size = 80 }: CircularProgressProps) {
     const progressPercentage = Math.max(0, Math.min(100, Math.floor(value)));
     const radius = (size - 8) / 2;
     const circumference = radius * 2 * Math.PI;

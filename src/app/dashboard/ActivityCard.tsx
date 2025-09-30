@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Brain, Leaf, Moon, BookOpen, Zap, Play, Star, Badge, Clock } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
 
 export interface Activity {
     id: string;
@@ -20,6 +19,7 @@ interface ActivityCardProps {
     activity: Activity;
     onToggleFavorite: (id: string) => void;
     userId: string;
+    incrementCount(): void;
 }
 
 const getCategoryGradient = (category: string) => {
@@ -55,15 +55,15 @@ const getCategoryIcon = (category: string) => {
     return icons[category as keyof typeof icons] || Heart
 }
 
-export default function ActivityCard({ activity, userId, onToggleFavorite }: ActivityCardProps) {
+export default function ActivityCard({ activity, userId, onToggleFavorite, incrementCount }: ActivityCardProps) {
     const [showModal, setShowModal] = useState(false);
     const Icon = getCategoryIcon(activity.category);
 
     const handleStart = async () => {
         if (userId) {
+            incrementCount();
             setShowModal(true);
         }
-//setShowModal
     };
 
     const handleClose = () => setShowModal(false);

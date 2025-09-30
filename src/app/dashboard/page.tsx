@@ -46,37 +46,46 @@ export default function MentalWellnessDashboard() {
   const [weeklyCompleted, setWeeklyCompleted] = useState<any>(0);
 
   const incrementCount = async (activity: Activity) => {
-    //what's activity and Activity here? or what's its type?
     if (!user) return;
 
-    const { data, error } = await supabase
-      .from('userStats')
-      .select('done_today')
-      .eq('user_id', user.id)
-      .single();
+    try {
+      // Get current count from state (which is already loaded from DB)
+      const newCount = doneToday + 1;
+      console.log(`Incrementing count from ${doneToday} to ${newCount}`);
+      console.log('Current user:', user);
 
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching done_today:', error);
-      return;
-    }
+      // Insert a new log entry for this activity completion
+      const { data, error: insertError } = await supabase
+        .from('userStats')
+        .insert({ 
+          user_id: user.id, 
+          done_today: newCount,
+          activity_id: activity.id,
+          category: activity.category,
+          created_at: new Date().toISOString()
+        })
+        .select();
 
-    const currentCount = data?.done_today || 0;
-    const newCount = currentCount + 1;
-
-    const { error: upsertError } = await supabase
-      .from('userStats')
-      .upsert({ 
-        user_id: user.id, 
-        done_today: newCount,
-        activity_id: activity.id,
-        category: activity.category 
-      }, { onConflict: 'user_id' });
-
-    if (upsertError) {
-      console.error('Error updating done_today:', upsertError);
-    } else {
-      console.log('✨ Updated done_today count!');
-      setDoneToday(newCount);
+      if (insertError) {
+        console.error('Error inserting activity completion:', insertError);
+        console.error('Insert error details:', JSON.stringify(insertError, null, 2));
+        
+        // Try alternative approach - check if we can read from the table
+        const { data: testRead, error: readError } = await supabase
+          .from('userStats')
+          .select('*')
+          .eq('user_id', user.id)
+          .limit(1);
+        
+        console.log('Test read result:', { testRead, readError });
+      } else {
+        console.log('✨ Activity completion recorded!');
+        console.log('Inserted data:', data);
+        console.log(`Total activities completed today: ${newCount}`);
+        setDoneToday(newCount);
+      }
+    } catch (error) {
+      console.error('Unexpected error in incrementCount:', error);
     }
   };
 
@@ -112,16 +121,28 @@ export default function MentalWellnessDashboard() {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
       if (user) {
-        const { data: statsData, error: statsError } = await supabase
+        // Count today's activities for initial load
+        const today = new Date();
+        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
+        const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
+        
+        console.log('Fetching activities between:', startOfDay, 'and', endOfDay);
+        
+        const { data: todayEntries, error: statsError } = await supabase
           .from('userStats')
-          .select('done_today')
+          .select('*')
           .eq('user_id', user.id)
-          .single();
+          .gte('created_at', startOfDay)
+          .lt('created_at', endOfDay);
 
-        if (statsError && statsError.code !== 'PGRST116') {
+        if (statsError) {
           console.error('Error fetching initial done_today:', statsError);
-        } else if (statsData) {
-          setDoneToday(statsData.done_today || 0);
+        } else {
+          const todayCount = todayEntries?.length || 0;
+          setDoneToday(todayCount);
+          console.log(`Found ${todayEntries?.length || 0} entries for today`);
+          console.log('Today entries:', todayEntries);
+          console.log(`Loaded today's activity count: ${todayCount}`);
         }
 
         const { data } = await supabase
@@ -221,6 +242,7 @@ export default function MentalWellnessDashboard() {
                 activity={activity}
                 onToggleFavorite={() => toggleFavorite}
                 userId={user?.id || ''}
+                incrementCount={() => incrementCount(activity)}
               />
             ))}
           </div>
@@ -250,6 +272,7 @@ export default function MentalWellnessDashboard() {
                     activity={activity}
                     onToggleFavorite={toggleFavorite}
                     userId={user?.id || ''}
+                    incrementCount={() => incrementCount(activity)}
                   />
                 ))}
             </div>

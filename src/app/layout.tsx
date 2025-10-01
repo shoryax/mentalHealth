@@ -1,5 +1,6 @@
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import { DarkModeProvider } from "@/components/DarkModeProvider";
+import { UserProvider } from "@/contexts/UserContext";
 import './globals.css';
 import TwinklingStars from "./settings/twinkle";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -9,10 +10,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <DarkModeProvider>
-          <TwinklingStars />
-          <div className="relative z-10">{children}</div>
-        </DarkModeProvider>
+        <UserProvider>
+          <DarkModeProvider>
+            <TwinklingStars />
+            <div className="relative z-10">{children}</div>
+          </DarkModeProvider>
+        </UserProvider>
       </body>
     </html>
   )

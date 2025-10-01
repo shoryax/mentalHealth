@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Search, Moon, Sun, Sunrise, Sunset, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "../../lib/supabaseClient";
+import { useUser } from "../../contexts/UserContext";
 import Header from "../../components/Header";
 import ActivityCard from "./ActivityCard";
 import QuickActions from "./QuickActions";
@@ -38,18 +39,19 @@ const getTimeBasedGreeting = () => {
 };
 
 export default function MentalWellnessDashboard() {
-  const [user, setUser] = useState<any>(null);
+  const { user, loading, displayName } = useUser();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [doneToday, setDoneToday] = useState(0);
   const [weeklyCompleted, setWeeklyCompleted] = useState<any>(0);
+  const [therapist, setTherapist] = useState<any>(null);
 
   const incrementCount = async (activity: Activity) => {
     if (!user) return;
 
     try {
-      // Get current count from state (which is already loaded from DB)
+      // Get current count from state (which is already loaded from supabase)
       const newCount = doneToday + 1;
       console.log(`Incrementing count from ${doneToday} to ${newCount}`);
       console.log('Current user:', user);
@@ -57,8 +59,8 @@ export default function MentalWellnessDashboard() {
       // Insert a new log entry for this activity completion
       const { data, error: insertError } = await supabase
         .from('userStats')
-        .insert({ 
-          user_id: user.id, 
+        .insert({
+          user_id: user.id,
           done_today: newCount,
           activity_id: activity.id,
           category: activity.category,
@@ -69,14 +71,14 @@ export default function MentalWellnessDashboard() {
       if (insertError) {
         console.error('Error inserting activity completion:', insertError);
         console.error('Insert error details:', JSON.stringify(insertError, null, 2));
-        
+
         // Try alternative approach - check if we can read from the table
         const { data: testRead, error: readError } = await supabase
           .from('userStats')
           .select('*')
           .eq('user_id', user.id)
           .limit(1);
-        
+
         console.log('Test read result:', { testRead, readError });
       } else {
         console.log('✨ Activity completion recorded!');
@@ -108,7 +110,7 @@ export default function MentalWellnessDashboard() {
       )
     );
   };
-
+  
   const [activitiesState, setActivities] = useState<Activity[]>(
     activities.map((activity: Activity) => ({
       ...activity,
@@ -117,17 +119,15 @@ export default function MentalWellnessDashboard() {
   );
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      if (user) {
+    if (typeof window !== 'undefined' && user) {
+      const fetchUserData = async () => {
         // Count today's activities for initial load
         const today = new Date();
         const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
         const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
-        
+
         console.log('Fetching activities between:', startOfDay, 'and', endOfDay);
-        
+
         const { data: todayEntries, error: statsError } = await supabase
           .from('userStats')
           .select('*')
@@ -152,10 +152,10 @@ export default function MentalWellnessDashboard() {
         if (data) {
           setFavorites(data.map((item: any) => item.activity_id));
         }
-      }
-    };
-    fetchUser();
-  }, []);
+      };
+      fetchUserData();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -173,7 +173,16 @@ export default function MentalWellnessDashboard() {
   }, [favorites, user]);
 
   const { greeting, icon: GreetingIcon, message } = getTimeBasedGreeting();
-  const displayName = user?.user_metadata?.full_name?.split(' ')[0] || "Guest";
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Loading...</h2>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (

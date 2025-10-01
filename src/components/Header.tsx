@@ -4,31 +4,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Menu, User, Sun, Moon } from 'lucide-react';
 import '../app/globals.css';
 import { supabase } from '../lib/supabaseClient';
+import { useUser } from '../contexts/UserContext';
 import Link from 'next/link';
 import { useDarkMode } from './DarkModeProvider';
 
 const Header = () => {
-  const [user, setUser] = useState<any>(null);
+  const { user, profileUrl, displayName, signOut: contextSignOut } = useUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data.user);
-    };
-
-    getUser();
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-    });
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -45,14 +29,9 @@ const Header = () => {
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setDropdownOpen(true);
+    await contextSignOut();
+    setDropdownOpen(false);
   };
-
-  const profileUrl = user?.user_metadata?.avatar_url;
-  const fullName = user?.user_metadata?.full_name;
-  const displayName = fullName ? fullName.split(' ')[0] : user?.email;
 
   return (
     <header className={`fixed top-0 left-1/2 -translate-x-1/2 w-3/4 mt-8 mb-16 backdrop-blur-lg rounded-2xl z-50 transition-colors duration-300 ${isDarkMode

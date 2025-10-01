@@ -243,10 +243,9 @@ const Settings = () => {
           <div key={index} className="py-2">
             <Button
               variant={setting.variant || 'outline'}
-              className={`w-full ${
-                setting.variant === 'destructive' ? isDarkMode ? 'bg-red-800 hover:bg-red-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'
-                                                  : isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-              }`}
+              className={`w-full ${setting.variant === 'destructive' ? isDarkMode ? 'bg-red-800 hover:bg-red-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'
+                  : isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                }`}
             >
               {setting.label}
             </Button>
@@ -259,18 +258,14 @@ const Settings = () => {
   return (
     <div className=''>
       {isDarkMode && <TwinklingStars />}
-      <div className='py-14'>
+      <div className='py-5'>
         <Header />
       </div>
       <div className={`min-h-screen bg-gradient-to-br`}>
-        <div className={`fix shadow-sm sticky top-0 z-50 ${isDarkMode ? 'bg-inherit' : 'bg-white'}`}>
+        <div className={`fix shadow-sm sticky top-0 ${isDarkMode ? 'bg-inherit' : 'bg-[rgb(219,230,237)]'}`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-4">
-                <Link href="/" className={`flex items-center space-x-2 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-black'} transition-colors`}>
-                  <ArrowLeft className="h-5 w-5" />
-                  <span>Back to Home</span>
-                </Link>
               </div>
             </div>
           </div>
@@ -279,6 +274,10 @@ const Settings = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="space-y-8">
             <div className="text-center">
+              <Link href="/" className={`flex items-center space-x-2 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-black'} transition-colors`}>
+                <ArrowLeft className="h-5 w-5" />
+                <span>Back to Home</span>
+              </Link>
               <h2 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-700'}`}>App Settings</h2>
               <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Customize your mental health journey</p>
             </div>

@@ -88,7 +88,7 @@ const Header = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className={`flex items-center bg-pink-100 rounded-lg space-x-2 px-2 py-1.5 hover:bg-opacity-20 transition-colors duration-300 ${isDarkMode ? 'hover:bg-white/20' : 'hover:bg-gray-200'
+                  className={`flex items-center rounded-lg space-x-2 px-2 py-1.5 hover:bg-opacity-20 transition-colors duration-300 ${isDarkMode ? 'hover:bg-white/20 bg-[#2f2835]' : 'hover:bg-gray-200 bg-[#dedede]'
                     }`}
                 >
                   {profileUrl ? (

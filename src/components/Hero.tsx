@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import TwinklingStars from '@/app/settings/twinkle';
+import ShinyText from '@/app/shadcn/ShinyText';
 
 const Hero = () => {
   return (
@@ -15,24 +16,42 @@ const Hero = () => {
           </div>
 
           <h1 className="text-4xl md:text-6xl font-bold text-gray-700 mb-6">
-            Your Mental Health
+
+            <ShinyText
+              text="Your Mental Health"
+              disabled={false}
+              speed={3}
+              className='custom-class'
+            />
             <span className="text-pink-600 block">Matters</span>
           </h1>
 
-          <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-500 mb-8 max-w-3xl mx-auto leading-relaxed">
             Discover thoughtfully crafted cards and resources designed to support your mental wellness journey.
             Find comfort, inspiration, and practical tools for better mental health.
           </p>
 
+
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/dashboard">
-              <button className="bg-pink-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-pink-700 transition-colors flex items-center justify-center space-x-2">
+              <button className="text-white px-8 py-3 rounded-lg border border-spacing-1 font-semibold hover:bg-pink-700 transition-colors flex items-center justify-center space-x-1">
                 <ArrowRight className="h-5 w-5" />
-                <span>Explore Cards</span>
+                <ShinyText
+                  text="Explore Cards"
+                  disabled={false}
+                  speed={5}
+                  className='custom-class'
+                />
               </button>
             </Link>
-            <button className="border-2 border-pink-500 text-pink-500 px-8 py-3 rounded-lg font-semibold hover:bg-pink-50 transition-colors">
-              Learn More
+            <button className="border border-1 text-pink-500 px-8 py-3 rounded-lg font-semibold hover:bg-pink-50 transition-colors">
+              <ShinyText
+                text="Learn More"
+                disabled={false}
+                speed={5}
+                className='custom-class'
+              />
             </button>
           </div>
         </div>

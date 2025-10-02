@@ -10,6 +10,7 @@ import {
 import TwinklingStars from '@/app/settings/twinkle';
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
+
 const FAQ = () => {
   const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation<HTMLDivElement>();
   const faqs = [
@@ -50,13 +51,13 @@ const FAQ = () => {
       ref={sectionRef}
       className={`bg py-12 transition-all duration-500 ease-out ${sectionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}
     >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto w-[55%] px-4 sm:px-6 lg:px-8">
         <TwinklingStars />
-        <div className="text-center mb-16">
+        <div className="mb-16 mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl">
             Find answers to common questions about our mental health resources
           </p>
         </div>
@@ -64,7 +65,7 @@ const FAQ = () => {
         <div className="space-y-4">
           {faqs.map((faq, index) => (
             <Collapsible key={index} className="bg-white/70 rounded-lg">
-              <CollapsibleTrigger className="flex justify-between items-center w-full p-6 text-left hover:bg-gray-100 transition-colors rounded-lg">
+              <CollapsibleTrigger className="flex justify-between items-center w-full p-6 text-left hover:bg-white/70 transition-colors rounded-lg">
                 <h3 className="text-lg font-semibold text-gray-700 pr-4">
                   {faq.question}
                 </h3>
@@ -78,8 +79,8 @@ const FAQ = () => {
         </div>
 
         <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4">Still have questions? We're here to help.</p>
-          <button className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors">
+          <p className="text-gray-500 mb-4">Still have questions? We're here to help.</p>
+          <button className=" text-gray-500/90 border border-spacing-3 px-6 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors">
             Contact Support
           </button>
         </div>

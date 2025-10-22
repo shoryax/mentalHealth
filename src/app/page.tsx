@@ -1,12 +1,12 @@
 import React from 'react';
-import Header from '../components/Header';
-import Hero from '../components/Hero';
-import FeaturedCards from '../components/FeaturedCards';
-import Categories from '../components/Categories';
-import Testimonials from '../components/hope';
-import Footer from '../components/Footer';
-import FAQ from '../components/faqs';
-import HealthChatbot from '@/components/HealthChatbot'
+import Header from '@/components/Header';
+import Hero from '@/components/Hero';
+import FeaturedCards from '@/components/FeaturedCards';
+import Categories from '@/components/Categories';
+import Testimonials from '@/components/hope';
+import Footer from '@/components/Footer';
+import FAQ from '@/components/faqs';
+import HealthChatbot from '@/components/HealthChatbot';
 import './globals.css';
 
 const Page = () => {

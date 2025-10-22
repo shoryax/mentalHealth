@@ -6,6 +6,7 @@ import Categories from '../components/Categories';
 import Testimonials from '../components/hope';
 import Footer from '../components/Footer';
 import FAQ from '../components/faqs';
+import HealthChatbot from '@/components/HealthChatbot'
 import './globals.css';
 
 const Page = () => {
@@ -18,6 +19,7 @@ const Page = () => {
         <Testimonials />
         <FAQ />
         <Footer />
+        <HealthChatbot />
       </div>
   );
 };

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Brain, Leaf, Moon, BookOpen, Zap, Play, Star, Badge, Clock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Heart, Brain, Leaf, Moon, BookOpen, Zap, Play, Star, Clock } from "lucide-react";
 
 export interface Activity {
     id: string;

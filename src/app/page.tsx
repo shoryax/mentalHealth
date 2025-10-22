@@ -5,7 +5,7 @@ import FeaturedCards from '@/components/FeaturedCards';
 import Categories from '@/components/Categories';
 import Testimonials from '@/components/hope';
 import Footer from '@/components/Footer';
-import FAQ from '@/components/Faqs';
+import FAQ from '@/components/fq';
 import HealthChatbot from '@/components/HealthChatbot';
 import './globals.css';
 

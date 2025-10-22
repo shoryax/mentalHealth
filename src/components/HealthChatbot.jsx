@@ -45,23 +45,23 @@ export default function HealthChatbot() {
       {/* Floating Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition"
+        className="fixed bottom-6 right-6 bg-pink-500 text-white p-4 rounded-full shadow-lg hover:bg-pink-700 transition"
       >
         💬
       </button>
 
       {/* Chat Window */}
       {open && (
-        <div className="fixed bottom-20 right-6 w-50 bg-white border rounded-3xl shadow-3xl p-4 flex flex-col">
-          <h2 className="text-lg font-semibold text-blue-700 mb-2">Health Assistant 🩺</h2>
+        <div className="fixed bottom-20 right-6 bg-white border rounded-3xl shadow-3xl p-4 flex flex-col" style={{ width: '450px', height: '600px' }}>
+          <h2 className="text-lg font-semibold text-pink-700 mb-2">Health Assistant 🩺</h2>
           <div className="flex-1 overflow-y-auto mb-2 space-y-2">
             {messages.map((m, i) => (
               <div
                 key={i}
                 className={`p-2 rounded-lg ${
                   m.sender === "user"
-                    ? "bg-blue-100 text-right"
-                    : "bg-gray-100 text-left"
+                    ? "bg-pink-100 text-right"
+                    : "bg-gray-300 text-left"
                 }`}
               >
                 {m.text}
@@ -81,13 +81,14 @@ export default function HealthChatbot() {
             <button
               onClick={sendMessage}
               disabled={loading}
-              className="bg-blue-600 text-white rounded-lg px-3 py-2 text-sm hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed"
+              className="bg-pink-600 text-white rounded-lg px-3 py-2 text-sm hover:bg-pink-700 disabled:bg-pink-300 disabled:cursor-not-allowed"
             >
               {loading ? "..." : "Send"}
             </button>
           </div>
           <p className="text-[10px] text-gray-400 mt-1 text-center">
-            ⚠️ I’m not a medical professional. Consult a doctor for serious issues.
+            ⚠️ I'm not a medical professional. Consult a doctor for serious issues.
+            And this doesn't store the asked questions to your account.
           </p>
         </div>
       )}

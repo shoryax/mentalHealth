@@ -61,7 +61,7 @@ export default function StatsCards({ completedToday, dailyGoal, weeklyCompleted 
             </div>
             <div>
               <p className="text-sm font-medium text-gray-600">Streak</p>
-              <p className="text-2xl font-bold text-white/80">7 days</p>
+              <p className="text-2xl font-bold text-white/80">0 days</p>
               <span className="inline-block px-2 py-1 text-xs rounded bg-purple-100 text-purple-700 mt-1">
                 Keep it up!
               </span>

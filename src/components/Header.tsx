@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Menu, User, Sun, Moon } from 'lucide-react';
+import { Menu, User, Sun, Moon, LayoutGrid } from 'lucide-react';
 import '../app/globals.css';
 import { supabase } from '../lib/supabaseClient';
 import { useUser } from '../contexts/UserContext';
@@ -135,6 +135,18 @@ const Header = () => {
                       <img src="exit.svg" alt="Sign Out" className="inline-block w-5 h-5 mr-2" />
                       Sign Out
                     </button>
+
+                    <Link
+                      href="/cards"
+                      className={`block px-4 py-2 text-sm transition-colors duration-300 ${isDarkMode
+                        ? 'text-gray-300 hover:bg-gray-700/50'
+                        : 'text-gray-700 hover:bg-pink-200/50'
+                        }`}
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <LayoutGrid className="inline-block w-5 h-5 mr-2 align-text-bottom" />
+                      Cards
+                    </Link>
                   </div>
                 )}
 
